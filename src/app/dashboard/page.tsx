@@ -18,7 +18,9 @@ const Dashboard: React.FC = () => {
   const handleSearch = async (query: string) => {
     try {
       const fetchedBlogs = await fetchBlog(query);
-      setBlogs(fetchedBlogs);
+      setBlogs(fetchedBlogs.blogs);
+      console.log("Hello")
+      console.log(blogs)
     } catch (err) {
       console.error('Error searching blogs:', err);
       setError('Failed to search blogs');
@@ -31,8 +33,9 @@ const Dashboard: React.FC = () => {
       router.push('/signin');
     } else if (status === 'authenticated') {
       fetchBlogs().then((fetchedBlogs) => {
-        console.log('Fetched blogs:', fetchedBlogs); // Debug log
+        //console.log('Fetched blogs:', fetchedBlogs); // Debug log
         setBlogs(fetchedBlogs);
+     
       }).catch((err) => {
         console.error('Error fetching blogs:', err); // Debug log
         setError('Failed to fetch blogs');
@@ -45,28 +48,45 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="dashboard">
-      <h1>Dashboard</h1>
-      <SearchBar onSearch={handleSearch} />
-      {error && <p className="error">{error}</p>}
-      {blogs.length > 0 ? (
-        <div className="blog-list">
-          {blogs.map((blog) => (
-            <BlogCard key={blog._id} {...blog} />
-          ))}
+    <div className="dashboard-wrapper">
+      <div className="dashboard-content">
+        <h1 className="centered-heading">Dashboard</h1>
+        <div className="search-bar-container">
+          <SearchBar onSearch={handleSearch} />
+          
         </div>
-      ) : (
-        <p>No blogs available</p>
-      )}
+        {error && <p className="error">{error}</p>}
+        {blogs.length > 0 ? (
+          <div className="blog-list">
+            {blogs.map((blog) => (
+              <BlogCard key={blog._id} {...blog} />
+            ))}
+          </div>
+        ) : (
+          <p>No blogs available</p>
+        )}
+      </div>
+   
       <style jsx>{`
-        .dashboard {
-          padding: 2rem;
+        .dashboard-wrapper {
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
           background-color: #f0f0f0;
         }
-        .dashboard h1 {
+        .dashboard-content {
+          flex: 1;
+          padding: 2rem;
+        }
+        .centered-heading {
           text-align: center;
           margin-bottom: 2rem;
           color: #333;
+        }
+        .search-bar-container {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 2rem;
         }
         .error {
           color: red;
@@ -78,6 +98,11 @@ const Dashboard: React.FC = () => {
           grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
           gap: 2rem;
           padding: 1rem;
+        }
+        .footer {
+          text-align: center;
+          padding: 1rem;
+          background-color: #add8e6;
         }
         @media (max-width: 600px) {
           .blog-list {

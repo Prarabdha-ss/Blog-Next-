@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   
     try {
       const blogs = await Blog.find(searchQuery).lean();
-      console.log('Blogs fetched:', blogs); // Debug log
+    //  console.log('Blogs fetched:', blogs); // Debug log
       return NextResponse.json({ blogs }, { status: 200 });
     } catch (error) {
       console.error('Error fetching blogs:', error);
